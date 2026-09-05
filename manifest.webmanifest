@@ -1,0 +1,18 @@
+{
+  "name": "ملف إنجاز المعلم - محمد الثقفي",
+  "short_name": "ملف الإنجاز",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f7f5",
+  "theme_color": "#16473f",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
