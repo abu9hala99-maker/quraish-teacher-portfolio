@@ -493,4 +493,30 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigat
 })();
 </script>
   <script src="https://aziritukszzixownhidj.supabase.co/functions/v1/portfolio-public-loader"></script>
+<script>
+document.addEventListener('change', async function(e){
+  const input = e.target;
+  if (!input.matches('.fileInput,.imageInput')) return;
+
+  const password = localStorage.getItem('quraish-portfolio-sync-password');
+  if (!password) return;
+
+  const section = input.dataset.input || '0';
+  const files = Array.from(input.files || []);
+
+  for (const file of files) {
+    const fd = new FormData();
+    fd.append('action','upload');
+    fd.append('password',password);
+    fd.append('section',section);
+    fd.append('created',Date.now().toString());
+    fd.append('file',file,file.name);
+
+    await fetch(
+      'https://aziritukszzixownhidj.supabase.co/functions/v1/portfolio-sync',
+      {method:'POST',body:fd}
+    );
+  }
+}, true);
+</script>
 </body></html>
