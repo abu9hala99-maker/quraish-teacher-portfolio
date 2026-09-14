@@ -501,21 +501,42 @@ document.addEventListener('change', async function(e){
   const password = localStorage.getItem('quraish-portfolio-sync-password');
   if (!password) return;
 
-  const section = input.dataset.input || '0';
   const files = Array.from(input.files || []);
+  if (!files.length) return;
 
-  for (const file of files) {
-    const fd = new FormData();
-    fd.append('action','upload');
-    fd.append('password',password);
-    fd.append('section',section);
-    fd.append('created',Date.now().toString());
-    fd.append('file',file,file.name);
+  e.preventDefault();
+  e.stopImmediatePropagation();
 
-    await fetch(
-      'https://aziritukszzixownhidj.supabase.co/functions/v1/portfolio-sync',
-      {method:'POST',body:fd}
-    );
+  const section = input.dataset.input || '0';
+
+  try {
+    for (const file of files) {
+      const fd = new FormData();
+      fd.append('action','upload');
+      fd.append('password',password);
+      fd.append('section',section);
+      fd.append('created',Date.now().toString());
+      fd.append('file',file,file.name);
+
+      const response = await fetch(
+        'https://aziritukszzixownhidj.supabase.co/functions/v1/portfolio-sync',
+        {method:'POST',body:fd}
+      );
+
+      const result = await response.json().catch(()=>({}));
+
+      if (!response.ok) {
+        throw new Error(result.message || result.error || 'تعذر رفع الملف');
+      }
+    }
+
+    input.value = '';
+    alert('تم رفع الملف إلى السحابة بنجاح ✅');
+    setTimeout(()=>location.reload(),800);
+
+  } catch(err) {
+    input.value = '';
+    alert('تعذر رفع الملف: ' + err.message);
   }
 }, true);
 </script>
